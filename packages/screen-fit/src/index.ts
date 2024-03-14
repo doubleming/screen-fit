@@ -1,16 +1,31 @@
+
+export enum EFillType {
+    cover, // 等比缩放，占满整个容器
+    widthFit, // 宽度占满容器，高等比缩放
+    heightFit, // 高度占满容器，宽等比缩放
+    contain, // 宽或高等比缩放，满足最大占满容器 默认
+    fill, // 宽和高填充整个容器，不进行等比缩放
+}
 export interface IScreenOptions {
-    designWidth?: number,
-    designHeight?: number
+    designWidth?: number,  // 设计稿的宽 默认 1920
+    designHeight?: number  // 设计稿的高 默认 1080
+    referenceParent?: boolean // 是否依据父容器宽高进行响应式变化 默认false
+    referenceDom?: HTMLElement // 依据referenceDom进行响应式变化，默认为body，优先级低于referenceParent，如果referenceParent设置为true，则按照父元素进行响应式
+    fitType?: EFillType  //适配方式 默认 contain
 }
 
 const defaultOptions: IScreenOptions = {
     designHeight: 1080,
-    designWidth: 1920
+    designWidth: 1920,
+    referenceParent: false,
+    referenceDom: document.body,
+    fitType: EFillType.contain
 }
 
+let parent: HTMLElement
 
-export function screenFit(root: HTMLDivElement | string, options: IScreenOptions ={}) {
-    options = {...options, ...defaultOptions}
+export function screenFit(root: HTMLDivElement | string, options: IScreenOptions = {}) {
+    options = { ...defaultOptions, ...options }
     if (typeof root === 'string') {
         root = document.querySelector<HTMLDivElement>(root)
     }
@@ -19,24 +34,46 @@ export function screenFit(root: HTMLDivElement | string, options: IScreenOptions
         return
     }
     wrapperRoot(root)
-    function resize() {
+    function resize(opt:IScreenOptions ={}) {
+        options = {...options, ...opt}
+        resizeWrapper(root as HTMLDivElement, options)
         transformRoot(root as HTMLDivElement, options)
     }
-    window.addEventListener('resize', resize)
-    resize()
+    const { containerDom } = getContainerSize(root, options)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const ob = new ResizeObserver(() =>resize())
+    ob.observe(containerDom)
+    function stopListener() {
+        ob.unobserve(containerDom)
+    }
+    return { resize, stopListener }
 }
 
 
 export default screenFit
 
+function getContainerSize(root: HTMLDivElement, options: IScreenOptions) {
+    const { referenceDom, referenceParent } = options as Required<IScreenOptions>
+    const containerDom = referenceParent ? parent : referenceDom
+    const { clientWidth: containerWidth, clientHeight: containerHeight } = containerDom
+    return {
+        containerDom,
+        containerWidth,
+        containerHeight
+    }
+}
 
+function resizeWrapper(root: HTMLDivElement, options: IScreenOptions) {
+    const wrapper = root.parentNode as HTMLElement
+    const { containerHeight, containerWidth } = getContainerSize(root, options)
+    wrapper.style.overflow = 'hidden'
+    wrapper.style.height = containerHeight ? `${containerHeight}px` : '100vh'
+    wrapper.style.width = containerWidth ? `${containerWidth}px` : '100vw'
+}
 
 function wrapperRoot(root: HTMLDivElement) {
-    const parent = root.parentNode
+    parent = root.parentNode as HTMLElement
     const wrapper = document.createElement("div")
-    wrapper.style.overflow = 'hidden'
-    wrapper.style.height = '100vh'
-    wrapper.style.width = '100vw'
     parent.removeChild(root)
     wrapper.appendChild(root)
     parent.appendChild(wrapper)
@@ -44,21 +81,95 @@ function wrapperRoot(root: HTMLDivElement) {
 
 function transformRoot(root: HTMLDivElement, options: IScreenOptions) {
     const { designHeight, designWidth } = options as Required<IScreenOptions>
+    root.style.height = `${designHeight}px`
+    root.style.width = `${designWidth}px`
+    calculateScale(root, options)
+}
+
+function calculateScale(root: HTMLDivElement, options: IScreenOptions) {
+    const { fitType } = options as Required<IScreenOptions>
+    const transformMap: Record<EFillType, (root: HTMLDivElement, options: IScreenOptions) => void> = {
+        [EFillType.cover]: coverTransform,
+        [EFillType.widthFit]: widthFitTransform,
+        [EFillType.heightFit]: heightFItTransform,
+        [EFillType.contain]: containTransform,
+        [EFillType.fill]: fillTransform
+    }
+    return transformMap[fitType](root, options)
+}
+
+function coverTransform(root: HTMLDivElement, options: IScreenOptions) {
+    const { designHeight, designWidth } = options as Required<IScreenOptions>
+    const { containerHeight, containerWidth } = getContainerSize(root, options)
     let scaleY = 1
     let scaleX = 1
-    const { innerHeight, innerWidth } = window
     const rate = designWidth / designHeight
-    const windowRete = innerWidth / innerHeight
-    if (windowRete > rate) {
-        scaleY = innerHeight / designHeight
-        scaleX = (innerHeight * rate) / designWidth
+    const containerRete = containerWidth / containerHeight
+    if (containerRete > rate) {
+        scaleX = containerWidth / designWidth
+        scaleY = (containerWidth / rate) / designHeight
     } else {
-        scaleX = innerWidth / designWidth
-        scaleY = (innerWidth / rate) / designHeight
+        scaleY = containerHeight / designHeight
+        scaleX = (containerHeight * rate) / designWidth
     }
     const getTrans = (input: number, out: number, rete: number) => (input - out) / (2 * rete)
-    const transform = `scale(${scaleX}, ${scaleY}) translateX(${getTrans(innerWidth, designWidth, scaleX)}px) translateY(${getTrans(innerHeight, designHeight, scaleY)}px)`
-    root.style.height = `${designHeight}px`
-    root.style.width  = `${designWidth}px`
-    root.style.transform = transform
+    root.style.transform = `scale(${scaleX}, ${scaleY}) translateX(${getTrans(containerWidth, designWidth, scaleX)}px) translateY(${getTrans(containerHeight, designHeight, scaleY)}px)`
+    root.style.transformOrigin = null
+}
+
+
+
+function widthFitTransform(root: HTMLDivElement, options: IScreenOptions) {
+    const { designHeight, designWidth } = options as Required<IScreenOptions>
+    const { containerWidth, containerHeight } = getContainerSize(root, options)
+    let scaleY = 1
+    let scaleX = 1
+    const rate = designWidth / designHeight
+    scaleX = containerWidth / designWidth
+    scaleY = (containerWidth / rate) / designHeight
+    const getTrans = (input: number, out: number, rete: number) => (input - out) / (2 * rete)
+    root.style.transform = `scale(${scaleX}, ${scaleY}) translateX(${getTrans(containerWidth, designWidth, scaleX)}px) translateY(${getTrans(containerHeight, designHeight, scaleY)}px)`
+    root.style.transformOrigin = null
+}
+
+function heightFItTransform(root: HTMLDivElement, options: IScreenOptions) {
+    const { designHeight, designWidth } = options as Required<IScreenOptions>
+    const { containerHeight, containerWidth } = getContainerSize(root, options)
+    let scaleY = 1
+    let scaleX = 1
+    const rate = designWidth / designHeight
+    scaleY = containerHeight / designHeight
+    scaleX = (containerHeight * rate) / designWidth
+    const getTrans = (input: number, out: number, rete: number) => (input - out) / (2 * rete)
+    root.style.transform = `scale(${scaleX}, ${scaleY}) translateX(${getTrans(containerWidth, designWidth, scaleX)}px) translateY(${getTrans(containerHeight, designHeight, scaleY)}px)`
+    root.style.transformOrigin = null
+}
+
+function fillTransform(root: HTMLDivElement, options: IScreenOptions) {
+    const { designHeight, designWidth } = options as Required<IScreenOptions>
+    const { containerHeight, containerWidth } = getContainerSize(root, options)
+    const scaleY = containerHeight / designHeight
+    const scaleX = containerWidth / designWidth
+    root.style.transform = `scale(${scaleX}, ${scaleY})`
+    root.style.transformOrigin = '0 0'
+}
+
+function containTransform(root: HTMLDivElement, options: IScreenOptions) {
+    const { designHeight, designWidth } = options as Required<IScreenOptions>
+    const { containerHeight, containerWidth } = getContainerSize(root, options)
+    let scaleY = 1
+    let scaleX = 1
+    const rate = designWidth / designHeight
+    const containerRete = containerWidth / containerHeight
+    if (containerRete > rate) {
+        scaleY = containerHeight / designHeight
+        scaleX = (containerHeight * rate) / designWidth
+    } else {
+        scaleX = containerWidth / designWidth
+        scaleY = (containerWidth / rate) / designHeight
+    }
+    const getTrans = (input: number, out: number, rete: number) => (input - out) / (2 * rete)
+    root.style.transform = `scale(${scaleX}, ${scaleY}) translateX(${getTrans(containerWidth, designWidth, scaleX)}px) translateY(${getTrans(containerHeight, designHeight, scaleY)}px)`
+    root.style.transformOrigin = null
+
 }

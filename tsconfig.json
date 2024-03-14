@@ -19,7 +19,6 @@
     "esModuleInterop": true,
     "removeComments": false,
     "lib": ["esnext", "dom"],
-    "types": ["vitest/globals", "node"],
     "rootDir": ".",
     "paths": {
       "@double_ming/*": ["packages/*/src"],
