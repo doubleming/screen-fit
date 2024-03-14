@@ -1,0 +1,9 @@
+{
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "cSpell.words": ["doubleming", "outfile", "execa","Leafer"],
+    "prettier.enable": false,
+    "editor.fromatOnSave": false,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit"
+    }
+}

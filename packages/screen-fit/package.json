@@ -1,0 +1,45 @@
+{
+  "name": "@double_ming/screen-fit",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "module": "dist/screen-fit.esm-bundler.js",
+  "types": "dist/screen-fit.d.ts",
+  "files": [
+    "index.js",
+    "README.md",
+    "dist"
+  ],
+   "exports": {
+    ".": {
+      "types": "./dist/screen-fit.d.ts",
+      "node": {
+        "production": "./dist/screen-fit.cjs.prod.js",
+        "development": "./dist/screen-fit.cjs.js",
+        "default": "./index.js"
+      },
+      "module": "./dist/screen-fit.esm-bundler.js",
+      "import": "./dist/screen-fit.esm-bundler.js",
+      "require": "./index.js"
+    },
+    "./*": "./*"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "screen",
+    "big screen",
+    "auto fit"
+  ],
+  "author": "doubleming",
+  "license": "ISC",
+  "buildOptions": {
+    "name": "DMScreenFit",
+    "formats": [
+      "esm-bundler",
+      "cjs",
+      "global"
+    ]
+  }
+}
