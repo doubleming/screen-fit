@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "type": "module",
+  "private": true,
   "scripts": {
     "dev": "node scripts/dev.js",
     "build": "node scripts/build.js && pnpm run build-dts",
