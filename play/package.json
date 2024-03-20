@@ -5,14 +5,17 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "vue-tsc && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@double_ming/screen-fit": "workspace:*"
+    "vue": "^3.4.21"
   },
   "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.4",
+    "sass": "^1.72.0",
     "typescript": "^5.2.2",
-    "vite": "^5.1.6"
+    "vite": "^5.1.6",
+    "vue-tsc": "^1.8.27"
   }
 }

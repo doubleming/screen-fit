@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 export class Resize {
     constructor(public el: HTMLElement, public option = {}) {
         this.init();

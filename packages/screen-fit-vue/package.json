@@ -8,15 +8,16 @@
   "scripts": {
     "dev": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": [
+    "screen",
+    "big screen",
+    "auto fit",
+    "vue component",
+    "screen vue"
+  ],
+  "peerDependencies": {
+    "vue": "^3.4.21"
+  },
   "author": "",
-  "license": "ISC",
-  "buildOptions": {
-    "name": "DMScreenFitVue",
-    "formats": [
-      "esm-bundler",
-      "cjs",
-      "global"
-    ]
-  }
+  "license": "ISC"
 }

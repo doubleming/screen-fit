@@ -16,13 +16,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@double_ming/screen-fit": "workspace:*"
+    "@double_ming/screen-fit": "workspace:*",
+    "@double_ming/screen-fit-vue": "workspace:*"
   },
   "devDependencies": {
     "@rollup/plugin-alias": "^5.1.0",
     "@rollup/plugin-commonjs": "^25.0.7",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^15.2.3",
+    "@types/node": "^20.11.30",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
     "esbuild": "^0.20.1",

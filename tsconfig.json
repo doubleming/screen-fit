@@ -28,8 +28,7 @@
   "include": [
     "scripts/**/*",
     "packages/**/*",
-    "play/src/vite-env.d.ts",
-    "play/src/**/*"
+    "play/**/*",
   ],
   "exclude": ["**/__tests__/**", "**/tests/**", "**/dist"]
 }
