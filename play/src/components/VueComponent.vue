@@ -3,15 +3,15 @@ import ScreenFit from '@double_ming/screen-fit-vue';
 import bg from '../assets/1.jpg'
 import { EFillType } from '@double_ming/screen-fit';
 import { ref } from 'vue';
-const coverType = ref<EFillType>(EFillType.contain)
+const fillType = ref<EFillType>(EFillType.contain)
 function action(type: EFillType) {
-  coverType.value = type
+  fillType.value = type
 }
 </script>
 
 <template>
   <div>
-      <ScreenFit >
+      <ScreenFit :fill-type="fillType">
         <div :style="{ backgroundImage: `url(${bg})` }"></div>
       </ScreenFit>
     <div class="action">

@@ -1,18 +1,22 @@
 <script setup lang="ts" name="ScreenFit">
+import { EFillType } from '@double_ming/screen-fit';
+import { PropType } from 'vue';
+
 defineOptions({
     name: "ScreenFit"
 })
 
 const props = defineProps({
-    bg: {
-        type: String,
-        default: ''
-    },
+   fillType: {
+      type: Number as PropType<EFillType>,
+      default: EFillType.contain
+   } 
 })
+
 </script>
 
 <template>
-  <div>
+  <div ref="screenWrapper">
     <slot />
   </div>
 </template>
