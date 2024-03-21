@@ -10,6 +10,7 @@ function action(type: EFillType) {
         fitType: type
     })
 }
+
 onMounted(() => {
     const screenDom = document.querySelector<HTMLDivElement>("#screen")
     new Resize(screenDom.parentNode as HTMLDivElement)
@@ -24,7 +25,9 @@ onMounted(() => {
 
 <template>
     <div>
-        <div id="screen" :style="{ backgroundImage: `url(${bg})` }"></div>
+        <div id="screen">
+            <div :style="{ backgroundImage: `url(${bg})`, width: '1920px', height: '1080px' }"></div>
+        </div>
         <div class="action">
             <span class="action-text">适配模式：</span>
             <button id="cover" @click="action(EFillType.cover)">cover</button>
@@ -42,6 +45,7 @@ onMounted(() => {
 <style lang="scss" scoped>
 #screen {
     background-color: #eee;
+    height: 100vh;
 }
 
 .action {

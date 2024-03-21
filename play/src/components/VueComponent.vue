@@ -2,18 +2,25 @@
 import ScreenFit from '@double_ming/screen-fit-vue';
 import bg from '../assets/1.jpg'
 import { EFillType } from '@double_ming/screen-fit';
-import { ref } from 'vue';
-const fillType = ref<EFillType>(EFillType.contain)
+import { onMounted, ref } from 'vue';
+
+import Resize from '../utils/resize'
+const fitType = ref<EFillType>(EFillType.contain)
 function action(type: EFillType) {
-  fillType.value = type
+  fitType.value = type
 }
+onMounted(() => {
+  new Resize(document.querySelector("#screenWrapper"))
+})
 </script>
 
 <template>
   <div>
-      <ScreenFit :fill-type="fillType">
-        <div :style="{ backgroundImage: `url(${bg})` }"></div>
+    <div id="screenWrapper">
+      <ScreenFit :fit-type="fitType" style="height: 100vh;">
+        <div :style="{ backgroundImage: `url(${bg})`, width: '1920px', height: '1080px' }"></div>
       </ScreenFit>
+    </div>
     <div class="action">
       <span class="action-text">适配模式：</span>
       <button id="cover" @click="action(EFillType.cover)">cover</button>
@@ -33,6 +40,7 @@ function action(type: EFillType) {
     position: fixed;
     z-index: 99999999;
     left: 0;
+    top: 0;
     background-color: #1a1a1a;
 
     &-text {

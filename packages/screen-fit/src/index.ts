@@ -9,7 +9,7 @@ export enum EFillType {
 export interface IScreenOptions {
     designWidth?: number,  // 设计稿的宽 默认 1920
     designHeight?: number  // 设计稿的高 默认 1080
-    referenceParent?: boolean // 是否依据父容器宽高进行响应式变化 默认false
+    referenceParent?: boolean // 是否依据父容器宽高进行响应式变化 默认true
     referenceDom?: HTMLElement // 依据referenceDom进行响应式变化，默认为body，优先级低于referenceParent，如果referenceParent设置为true，则按照父元素进行响应式
     fitType?: EFillType  //适配方式 默认 contain
 }
@@ -17,7 +17,7 @@ export interface IScreenOptions {
 const defaultOptions: IScreenOptions = {
     designHeight: 1080,
     designWidth: 1920,
-    referenceParent: false,
+    referenceParent: true,
     referenceDom: document.body,
     fitType: EFillType.contain
 }
@@ -25,7 +25,8 @@ const defaultOptions: IScreenOptions = {
 let parent: HTMLElement
 
 export function screenFit(root: HTMLDivElement | string, options: IScreenOptions = {}) {
-    options = { ...defaultOptions, ...options }
+    console.log({...options}, 'in')
+    options = customMerge(defaultOptions, options)
     if (typeof root === 'string') {
         root = document.querySelector<HTMLDivElement>(root)
     }
@@ -33,15 +34,15 @@ export function screenFit(root: HTMLDivElement | string, options: IScreenOptions
         console.error(`${root}不是element元素，或者css选择器不存在`)
         return
     }
-    wrapperRoot(root)
-    function resize(opt:IScreenOptions ={}) {
-        options = {...options, ...opt}
+    wrapperRoot(root, options)
+    function resize(opt: IScreenOptions = {}) {
+        options = customMerge(options, opt)
         resizeWrapper(root as HTMLDivElement, options)
         transformRoot(root as HTMLDivElement, options)
     }
     const { containerDom } = getContainerSize(root, options)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const ob = new ResizeObserver(() =>resize())
+    const ob = new ResizeObserver(() => resize())
     ob.observe(containerDom)
     function stopListener() {
         ob.unobserve(containerDom)
@@ -71,12 +72,18 @@ function resizeWrapper(root: HTMLDivElement, options: IScreenOptions) {
     wrapper.style.width = containerWidth ? `${containerWidth}px` : '100vw'
 }
 
-function wrapperRoot(root: HTMLDivElement) {
+function wrapperRoot(root: HTMLDivElement, options: IScreenOptions) {
+    const { referenceDom, referenceParent } = options as Required<IScreenOptions>
     parent = root.parentNode as HTMLElement
-    const wrapper = document.createElement("div")
     parent.removeChild(root)
-    wrapper.appendChild(root)
-    parent.appendChild(wrapper)
+    if (referenceParent) {
+        const wrapper = document.createElement("div")
+        wrapper.appendChild(root)
+        parent.appendChild(wrapper)
+    } else {
+        referenceDom.appendChild(root)
+        parent = referenceDom
+    }
 }
 
 function transformRoot(root: HTMLDivElement, options: IScreenOptions) {
@@ -171,5 +178,15 @@ function containTransform(root: HTMLDivElement, options: IScreenOptions) {
     const getTrans = (input: number, out: number, rete: number) => (input - out) / (2 * rete)
     root.style.transform = `scale(${scaleX}, ${scaleY}) translateX(${getTrans(containerWidth, designWidth, scaleX)}px) translateY(${getTrans(containerHeight, designHeight, scaleY)}px)`
     root.style.transformOrigin = null
+}
 
+
+function customMerge(defaultOpt: IScreenOptions, opt: IScreenOptions): IScreenOptions {
+    const newOpt: IScreenOptions = {}
+    Object.keys(defaultOpt).forEach(key => {
+        const k = key as keyof IScreenOptions
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (newOpt as any)[k] = opt[k] ?? defaultOpt[k]
+    })
+    return newOpt
 }
