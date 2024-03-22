@@ -1,6 +1,6 @@
 {
     "typescript.tsdk": "node_modules/typescript/lib",
-    "cSpell.words": ["doubleming", "outfile", "execa","Leafer"],
+    "cSpell.words": ["doubleming", "outfile", "execa","childs"],
     "prettier.enable": false,
     "editor.fromatOnSave": false,
     "editor.codeActionsOnSave": {

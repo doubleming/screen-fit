@@ -2,7 +2,7 @@
 import screenFit, { EFillType, IScreenOptions } from '@double_ming/screen-fit'
 import bg from '../assets/1.jpg'
 import Resize from '../utils/resize'
-import { onMounted } from 'vue'
+import { onMounted, reactive, watch } from 'vue'
 
 let resize: (opt: IScreenOptions) => void
 function action(type: EFillType) {
@@ -11,14 +11,14 @@ function action(type: EFillType) {
     })
 }
 
+
+
 onMounted(() => {
     const screenDom = document.querySelector<HTMLDivElement>("#screen")
-    new Resize(screenDom.parentNode as HTMLDivElement)
-
     const fitObj = screenFit(screenDom!, {
         fitType: EFillType.contain,
-        referenceParent: true
     })
+    new Resize(screenDom)
     resize = fitObj.resize
 })
 </script>
@@ -44,7 +44,6 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 #screen {
-    background-color: #eee;
     height: 100vh;
 }
 
@@ -52,6 +51,7 @@ onMounted(() => {
     position: fixed;
     z-index: 99999999;
     left: 0;
+    top: 0;
     background-color: #1a1a1a;
 
     &-text {

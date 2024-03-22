@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 export class Resize {
-    constructor(public el: HTMLElement, public option = {}) {
+    constructor(public el: HTMLElement, public option = {
+        change: () => {}
+    }) {
         this.init();
     }
 
@@ -65,6 +67,7 @@ export class Resize {
         window.addEventListener('mouseup', () => {
             setTimeout(() => {
                 isMove = false;
+                this.option.change()
             }, 100);
         });
     }
@@ -88,6 +91,7 @@ export class Resize {
         window.addEventListener('mouseup', () => {
             setTimeout(() => {
                 isMove = false;
+                this.option.change()
             }, 100);
         });
     }
@@ -111,6 +115,7 @@ export class Resize {
         window.addEventListener('mouseup', () => {
             setTimeout(() => {
                 isMove = false;
+                this.option.change()
             }, 100);
         });
     }
@@ -134,6 +139,7 @@ export class Resize {
         window.addEventListener('mouseup', () => {
             setTimeout(() => {
                 isMove = false;
+                this.option.change()
             }, 100);
         });
     }
@@ -157,6 +163,7 @@ export class Resize {
         window.addEventListener('mouseup', () => {
             setTimeout(() => {
                 isMove = false;
+                this.option.change()
             }, 100);
         });
     }
@@ -180,6 +187,7 @@ export class Resize {
         window.addEventListener('mouseup', () => {
             setTimeout(() => {
                 isMove = false;
+                this.option.change()
             }, 100);
         });
     }
@@ -205,6 +213,7 @@ export class Resize {
         window.addEventListener('mouseup', () => {
             setTimeout(() => {
                 isMove = false;
+                this.option.change()
             }, 100);
         });
     }
@@ -228,6 +237,7 @@ export class Resize {
         window.addEventListener('mouseup', () => {
             setTimeout(() => {
                 isMove = false;
+                this.option.change()
             }, 100);
         });
     }

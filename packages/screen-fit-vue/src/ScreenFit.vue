@@ -6,15 +6,29 @@ defineOptions({
     name: "ScreenFit"
 })
 
-const props = defineProps<IScreenOptions>()
+const props = withDefaults(defineProps<IScreenOptions>(), {
+  fitType: EFillType.contain
+}) 
 
 const screenDom = ref<HTMLDivElement|null>()
 
-let resize: (opt: IScreenOptions) => void
+let fitObj: ReturnType<typeof screenFit>
+
+function handleResize(fitType: EFillType) {
+  if (fitObj) {
+    fitObj.resize({
+      fitType: fitType || props.fitType
+    })
+  }
+}
 
 watch(() => props.fitType, (fitType) => {
-  console.log(fitType)
-  resize({fitType})
+  handleResize(fitType)
+})
+
+
+defineExpose({
+  handleResize
 })
 
 
@@ -23,14 +37,11 @@ onMounted(() => {
     console.warn('大屏尚未挂载')
     return
    }
-    const fitObj = screenFit(screenDom.value!, {
-        fitType: props.fitType,
-        referenceDom: props.referenceDom,
-        referenceParent: props.referenceParent || true,
-        designWidth: props.designWidth,
-        designHeight: props.designHeight,
-    })
-    resize = fitObj.resize
+   fitObj = screenFit(screenDom.value!, {
+       fitType: props.fitType,
+       designWidth: props.designWidth,
+       designHeight: props.designHeight,
+   })
 })
 
 </script>

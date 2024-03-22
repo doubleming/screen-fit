@@ -2,23 +2,33 @@
 import ScreenFit from '@double_ming/screen-fit-vue';
 import bg from '../assets/1.jpg'
 import { EFillType } from '@double_ming/screen-fit';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch, reactive } from 'vue';
 
 import Resize from '../utils/resize'
 const fitType = ref<EFillType>(EFillType.contain)
 function action(type: EFillType) {
   fitType.value = type
 }
+
+const screenFitRef = ref<InstanceType<typeof ScreenFit>>()
+const height = ref('100vh')
+
 onMounted(() => {
-  new Resize(document.querySelector("#screenWrapper"))
+  const screenWrapper = document.querySelector<HTMLElement>("#screenWrapper")
+  new Resize(screenWrapper!, {
+    change: () => {
+      const { clientHeight } = screenWrapper
+      height.value = `${clientHeight}px`
+    }
+  })
 })
 </script>
 
 <template>
   <div>
     <div id="screenWrapper">
-      <ScreenFit :fit-type="fitType" style="height: 100vh;">
-        <div :style="{ backgroundImage: `url(${bg})`, width: '1920px', height: '1080px' }"></div>
+      <ScreenFit ref="screenFitRef" :design-height="1000" :design-width="1800" :fit-type="fitType" :style="{ height: `${height}` }">
+        <div :style="{ backgroundImage: `url(${bg})`, width: '1800px', height: '1000px', objectFit: 'cover' }"></div>
       </ScreenFit>
     </div>
     <div class="action">
@@ -37,25 +47,25 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .action {
-    position: fixed;
-    z-index: 99999999;
-    left: 0;
-    top: 0;
-    background-color: #1a1a1a;
+  position: fixed;
+  z-index: 99999999;
+  left: 0;
+  top: 0;
+  background-color: #1a1a1a;
 
-    &-text {
-        padding: 0.6em 1.2em;
-    }
+  &-text {
+    padding: 0.6em 1.2em;
+  }
 
-    &-info {
-        padding: 0.6em 1.2em;
-        text-align: left;
-        font-size: 20px;
-        color: red;
-    }
+  &-info {
+    padding: 0.6em 1.2em;
+    text-align: left;
+    font-size: 20px;
+    color: red;
+  }
 
-    button {
-        width: 100px;
-    }
+  button {
+    width: 100px;
+  }
 }
 </style>
