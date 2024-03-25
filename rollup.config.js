@@ -2,7 +2,9 @@ import { dirname, resolve } from 'path'
 import { createRequire } from 'node:module'
 import { fileURLToPath } from 'url'
 import json from '@rollup/plugin-json'
+import vue from '@vitejs/plugin-vue'
 import alias from '@rollup/plugin-alias'
+import VueMacros from 'unplugin-vue-macros/rollup'
 import esbuild from 'rollup-plugin-esbuild'
 import polyfillNode from 'rollup-plugin-polyfill-node'
 import commonjs from '@rollup/plugin-commonjs'
@@ -60,6 +62,9 @@ function createConfig(format, output) {
     output.externalLiveBindings = false
     if (isGlobalBuild) {
         output.name = name
+        output.globals = {
+            "vue": "vue"
+        }
     }
 
     return {
@@ -69,20 +74,30 @@ function createConfig(format, output) {
             ...Object.keys(pkg.peerDependencies || {})
         ],
         plugins: [
-            json({ namedExports: false }),
-            alias({
-                entries: {
-                    '@double_ming/relation': resolve(__dirname, 'packages/relation/src/index.ts'),
-                    '@double_ming/relation-utils': resolve(__dirname, 'packages/utils/src/index.ts'),
-                    '@double_ming/relation-compute': resolve(__dirname, 'packages/compute/src/index.ts'),
+            VueMacros({
+                setupComponent: true,
+                setupSFC: true,
+                plugins: {
+                    vue: vue({
+                        isProduction: true
+                    })
                 }
             }),
+            alias({
+                entries: {
+                    '@double_ming/screen-fit': resolve(__dirname, 'packages/screen-fit/src/index.ts'),
+                }
+            }),
+            json({ namedExports: false }),
             esbuild({
                 tsconfig: resolve(__dirname, 'tsconfig.json'),
                 sourceMap: false,
                 minify: false,
                 target: isNodeBuild ? 'es2019' : 'es2015',
-                define: resolveDefine()
+                define: resolveDefine(),
+                loaders: {
+                    ".vue": 'ts'
+                }
             }),
             commonjs({
                 sourceMap: false
@@ -90,6 +105,7 @@ function createConfig(format, output) {
             ...(format === 'cjs' ? [] : [polyfillNode()]),
             nodeResolve(),
         ],
+        treeshake: true,
         output
     }
 }

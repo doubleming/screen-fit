@@ -22,13 +22,13 @@
     "rootDir": ".",
     "paths": {
       "@double_ming/*": ["packages/*/src"],
-      "@double_ming/utils": ["utils/src"],
     }
   },
   "include": [
     "scripts/**/*",
     "packages/**/*",
     "play/**/*",
+    "typings/env.d.ts"
   ],
   "exclude": ["**/__tests__/**", "**/tests/**", "**/dist"]
 }

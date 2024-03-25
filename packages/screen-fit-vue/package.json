@@ -19,5 +19,13 @@
     "vue": "^3.4.21"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+   "buildOptions": {
+    "name": "DMScreenFitVue",
+    "formats": [
+      "esm-bundler",
+      "cjs",
+      "global"
+    ]
+  }
 }

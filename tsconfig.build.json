@@ -2,12 +2,17 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "declaration": true,
-    "emitDeclarationOnly": true,
+    // "emitDeclarationOnly": true,
+    "skipLibCheck": true,
+    "types": [
+      "unplugin-vue-macros/macros-global"
+    ],
   },
   "include": [
     "packages/screen-fit",
     "packages/screen-fit-vue",
-    "utils",
+    "typings/env.d.ts",
+    "typings/components.d.ts"
   ],
   "exclude": [
     "**/__tests__/**",
