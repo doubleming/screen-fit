@@ -1,13 +1,10 @@
 {
   "name": "@double_ming/screen-fit-vue",
   "version": "1.0.0",
-  "description": "",
+  "description": "支持等比缩放、宽度占满、高度占满、宽或高等比缩放，满足最大占满容器、宽高填充整个容器不进行等比缩放等数字大屏适配 vue组件",
   "main": "index.js",
   "module": "dist/screen-fit-vue.esm-bundler.js",
   "types": "dist/screen-fit-vue.d.ts",
-  "scripts": {
-    "dev": "echo \"Error: no test specified\" && exit 1"
-  },
   "keywords": [
     "screen",
     "big screen",
@@ -18,6 +15,9 @@
   "peerDependencies": {
     "vue": "^3.4.21"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "files": [
     "index.js",
     "README.md",
@@ -27,7 +27,7 @@
     ".": {
       "types": "./dist/screen-fit-vue.d.ts",
       "node": {
-        "production": "./dist/screen-fit-vue.cjs.prod.js",
+        "production": "./dist/screen-fit-vue.cjs.js",
         "development": "./dist/screen-fit-vue.cjs.js",
         "default": "./index.js"
       },
@@ -37,7 +37,7 @@
     },
     "./*": "./*"
   },
-  "author": "",
+  "author": "doubleming",
   "license": "ISC",
    "buildOptions": {
     "name": "DMScreenFitVue",

@@ -1,7 +1,7 @@
 {
   "name": "@double_ming/screen-fit",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.0.1",
+  "description": "支持等比缩放、宽度占满、高度占满、宽或高等比缩放，满足最大占满容器、宽高填充整个容器不进行等比缩放等数字大屏适配",
   "main": "index.js",
   "module": "dist/screen-fit.esm-bundler.js",
   "types": "dist/screen-fit.d.ts",
@@ -14,7 +14,7 @@
     ".": {
       "types": "./dist/screen-fit.d.ts",
       "node": {
-        "production": "./dist/screen-fit.cjs.prod.js",
+        "production": "./dist/screen-fit.cjs.js",
         "development": "./dist/screen-fit.cjs.js",
         "default": "./index.js"
       },
