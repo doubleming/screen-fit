@@ -18,6 +18,25 @@
   "peerDependencies": {
     "vue": "^3.4.21"
   },
+  "files": [
+    "index.js",
+    "README.md",
+    "dist"
+  ],
+   "exports": {
+    ".": {
+      "types": "./dist/screen-fit-vue.d.ts",
+      "node": {
+        "production": "./dist/screen-fit-vue.cjs.prod.js",
+        "development": "./dist/screen-fit-vue.cjs.js",
+        "default": "./index.js"
+      },
+      "module": "./dist/screen-fit-vue.esm-bundler.js",
+      "import": "./dist/screen-fit-vue.esm-bundler.js",
+      "require": "./index.js"
+    },
+    "./*": "./*"
+  },
   "author": "",
   "license": "ISC",
    "buildOptions": {
