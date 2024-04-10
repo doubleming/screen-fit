@@ -1,6 +1,6 @@
 {
   "name": "@double_ming/screen-fit-vue",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "支持等比缩放、宽度占满、高度占满、宽或高等比缩放，满足最大占满容器、宽高填充整个容器不进行等比缩放等数字大屏适配 vue组件",
   "main": "index.js",
   "module": "dist/screen-fit-vue.esm-bundler.js",
@@ -14,9 +14,6 @@
   ],
   "peerDependencies": {
     "vue": "^3.4.21"
-  },
-  "publishConfig": {
-    "access": "public"
   },
   "files": [
     "index.js",
@@ -38,6 +35,17 @@
     "./*": "./*"
   },
   "author": "doubleming",
+  "homepage": "https://doubleming.github.io/screen-fit/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/doubleming/screen-fit.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "bugs": {
+    "url": "https://github.com/doubleming/screen-fit/issues"
+  },
   "license": "ISC",
    "buildOptions": {
     "name": "DMScreenFitVue",
