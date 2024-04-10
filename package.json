@@ -10,7 +10,8 @@
     "build": "node scripts/build.js && pnpm run build-dts",
     "build-dts": "tsx scripts/build-dts.ts",
     "play": "pnpm run -C play dev",
-    "build-play": "pnpm run -C play build"
+    "build-play": "pnpm run -C play build",
+    "publish": "/bin/bash scripts/publish.sh"
   },
   "keywords": [],
   "author": "",

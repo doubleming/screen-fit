@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-# pnpm build
+pnpm build
 
 cd packages/screen-fit
 npm publish
