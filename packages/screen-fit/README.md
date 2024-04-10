@@ -1,6 +1,6 @@
 <h2 style="text-align: center;"> 大屏只适应适配 </h2>
 
-![alt relation](./relation.gif)
+![screen-fit](./screen-fit.gif)
 
 ## 安装
 ```sh

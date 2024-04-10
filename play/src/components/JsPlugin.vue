@@ -53,9 +53,14 @@ onMounted(() => {
     left: 0;
     top: 0;
     background-color: #1a1a1a;
-
+    
     &-text {
         padding: 0.6em 1.2em;
+        color: white;
+    }
+
+    button {
+        color: white;
     }
 
     &-info {

@@ -4,8 +4,8 @@ import VueComponent from './components/VueComponent.vue';
 </script>
 
 <template>
-  <!-- <JsPlugin /> -->
-  <VueComponent />
+  <JsPlugin />
+  <!-- <VueComponent /> -->
 </template>
 
 <style scoped>
